@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "name": "arm-none-eabi-gcc",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/",
+                "${workspaceFolder}/SDK/include",
+                "${workspaceFolder}/SDK/ril/inc",
+                "${workspaceFolder}/SDK/custom/fota/inc",
+                "${workspaceFolder}/SDK/custom/config",
+                "C:\\Program Files (x86)\\CodeSourcery\\Sourcery_CodeBench_Lite_for_ARM_EABI\\arm-none-eabi\\include"
+            ],
+            "defines": [
+                "__CUSTOMER_CODE__"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "C:\\Program Files (x86)\\CodeSourcery\\Sourcery_CodeBench_Lite_for_ARM_EABI\\bin\\arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

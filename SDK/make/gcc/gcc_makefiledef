@@ -1,0 +1,96 @@
+##==========================================================================
+ #                   Quectel OpenCPU
+ #
+ #              Copyright(c) 2012-2013 Quectel Ltd. All rights reserved.
+ #
+ #--------------------------------------------------------------------------
+ # File Description
+ # ----------------
+ #      OpenCPU makefile definition.
+ #
+ #--------------------------------------------------------------------------
+ #
+ #  Created by   :     Stanley YONG
+ #        Date   :     December 18, 2012
+ #==========================================================================
+
+#-------------------------------------------------------------------------------
+# Configure environment path
+#-------------------------------------------------------------------------------
+BIN_DIR=build\gcc
+OBJ_DIR=$(BIN_DIR)\obj
+BUILDLOG=$(BIN_DIR)/build.log
+ENV_PATH=$(strip $(GCC_INSTALL_PATH))/bin
+ENV_INC='$(strip $(GCC_INSTALL_PATH))/arm-none-eabi/include'
+ENV_LIB_EABI='$(strip $(GCC_INSTALL_PATH))/arm-none-eabi/lib/thumb'
+ENV_LIB_GCC='$(strip $(GCC_INSTALL_PATH))/lib/gcc/arm-none-eabi/$(GCC_VERSION)/thumb'
+
+#-------------------------------------------------------------------------------
+# Configure compiling utilities
+#-------------------------------------------------------------------------------
+CC='$(ENV_PATH)/arm-none-eabi-gcc.exe'
+LD='$(ENV_PATH)/arm-none-eabi-ld.exe'
+OBJCOPY='$(ENV_PATH)/arm-none-eabi-objcopy.exe'
+RM='$(ENV_PATH)/cs-rm.exe'
+MAKE=make/make.exe
+HEADGEN=make/GFH_Generator.exe
+#-------------------------------------------------------------------------------
+# Configure standard reference library
+#-------------------------------------------------------------------------------
+STDLIB=$(ENV_LIB_EABI)/libm.a $(ENV_LIB_EABI)/libc.a $(ENV_LIB_EABI)/libcs3.a $(ENV_LIB_GCC)/libgcc.a
+
+#-------------------------------------------------------------------------------
+# Configure compiling options
+#-------------------------------------------------------------------------------
+SFLAGS=-c -mlong-calls -march=armv5te -mlittle-endian -mthumb-interwork -mfpu=vfp -mfloat-abi=soft -Wall -Wstrict-prototypes -Os
+CFLAGS=-c -mlong-calls -march=armv5te -mlittle-endian -mthumb-interwork -mfpu=vfp -mfloat-abi=soft -Wall -Wstrict-prototypes -std=c99 -Os \
+       -ffunction-sections -pipe -ftracer -fivopts
+
+C_DEF=-D MT6252 -D __OCPU_COMPILER_GCC__
+LDFLAGS=-Rbuild -X --gc-sections -T libs/gcc/linkscript.ld -nostartfiles
+OBJCOPYFLAGS=
+
+#-------------------------------------------------------------------------------
+# Definition for compiling procedure
+#-------------------------------------------------------------------------------
+new: CreateDir $(BIN_DIR)/$(TARGET).bin
+	@$(HEADGEN) $(BIN_DIR)/$(TARGET).bin
+
+$(BIN_DIR)/$(TARGET).bin: $(BIN_DIR)/$(TARGET).elf
+	@$(OBJCOPY) $(OBJCOPYFLAGS) -O binary $< $@
+	@echo ----------------------------------------------------
+	@echo - GCC Compiling Finished Sucessfully.
+	@echo - The target image is in the '$(BIN_DIR)' directory.
+	@echo ----------------------------------------------------
+
+$(BIN_DIR)/$(TARGET).elf: $(OBJS)
+	@$(LD) $(LDFLAGS) -Map $(BIN_DIR)/$(TARGET).map -o $@ $(OBJS) $(USERLIB) $(STDLIB)
+
+$(OBJ_DIR)/%.o: %.S
+	@echo - Building  $@ 
+	@$(CC) $(C_DEF) $(SFLAGS) -o $@ $<
+
+$(OBJ_DIR)/%.o: %.c
+#	$(warning <-- Start to CC, C_PREDEF=$(C_PREDEF) -->)
+	@echo - Building  $@ 
+	@$(CC) $(C_DEF) $(C_PREDEF) $(CFLAGS) $(INCS) -o $@ $<
+
+CreateDir:
+	@$(RM) -f $(BIN_DIR)/$(TARGET).bin
+	@if not exist $(BIN_DIR) (md $(BIN_DIR))
+	@if not exist $(OBJ_DIR) (md $(OBJ_DIR))
+	@for /d %%y in ($(SRC_DIRS)) do \
+		@if not exist $(OBJ_DIR)/%%y ( \
+			(@echo creating direcotry $(OBJ_DIR)\%%y) & \
+			(md $ $(OBJ_DIR)\%%y))
+
+clean:
+	@$(RM) -f $(OBJS) $(BUILDLOG) \
+	    $(BIN_DIR)/$(TARGET).map \
+		$(BIN_DIR)/$(TARGET).bin \
+		$(BIN_DIR)/$(TARGET).elf 
+	@echo -------------------
+	@echo clean finished.
+	@echo -------------------
+
+.PHONY: all clean CreateDir

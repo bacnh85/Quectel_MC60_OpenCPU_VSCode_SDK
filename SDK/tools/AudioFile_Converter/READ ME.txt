@@ -1,0 +1,37 @@
+
+[DESCRIPTION]:
+--------------
+This tool is used to generate the audio memory data from audio file. Withe the memory data of audio, OpenCPU can compile the audio data into App bin.
+
+
+[USAGE]:
+--------------
+1. edit audio.txt, add all audio files to audio.txt.
+	example: add "audio\wav11k.wav" to audio.txt.
+
+2. Run "QlAudioResGen.exe", which will build all audio files to the audio stream data in audio.txt.
+
+3. QlAudioResGen.exe will create resource_audio.c and resource_audio.h, then copy these two files to your project, or just copy the content of array to your codes.
+
+4. To play audio resource bin to remoute side in call, you can call the APIs:
+      RIL_AUD_PlayMemBg()/RIL_AUD_StopPlayMemBg()
+
+   To play audio resource bin in idle (not in call), you can call the APIs:
+      RIL_AUD_PlayMem()/RIL_AUD_StopPlayMem()
+
+
+Note:
+   You can compile the example_audio.c to test this feature.
+   Test procedure:
+   1. compile and run example_audio.c
+   2. Input commands through MAIN uart port.
+      "set channel: <0/1/2>"   (set audio channel, normal/headset/handfree)
+      "play audio mem=<1/2/3>,0"  (play audio with mp3/amr/wav format)
+
+   
+   if play audio to remote side in call, you need establish voice connection before playing audio.
+   1. compile and run example_audio.c
+   2. Input commands through MAIN uart port.
+      "set channel: <0/1/2>"   (set audio channel, normal/headset/handfree)
+      "ATDxxx;"  (dial a cellphone number, or answer a call with "ATA")
+      "play audio mem=2,0"  (play audio with amr format)
