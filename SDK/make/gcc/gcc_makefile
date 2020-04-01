@@ -24,11 +24,7 @@ GCC_VERSION=4.7.2
 #GCC_INSTALL_PATH=C:\Program Files\CodeSourcery\Sourcery_CodeBench_Lite_for_ARM_EABI 
 
 C_PREDEF=-D __CUSTOMER_CODE__
-#-------------------------------------------------------------------------------
-# Configure the Cloud Solution
-#-------------------------------------------------------------------------------
-CLOUD_SOLUTION =
-#GITWIZS_SOLUTION
+
 
 #-------------------------------------------------------------------------------
 # Configure version and out target
@@ -82,21 +78,6 @@ OBJS=\
 
 
 
-ifeq ($(strip $(CLOUD_SOLUTION)),GITWIZS_SOLUTION)
-     INCS +=-I cloud/entity/gitwizs/inc
-	 INCS +=-I cloud/http/inc
-	 INCS +=-I cloud/protocol/mqtt/inc
-	 SRC_DIRS +=cloud\entity\gitwizs\src
-	 SRC_DIRS +=cloud\http\src
-	 SRC_DIRS +=cloud\protocol\mqtt\src
-	 SRC_CLOUD =$(wildcard cloud/entity/gitwizs/src/*.c)
-	 SRC_CLOUD +=$(wildcard cloud/http/src/*.c)
-	 SRC_CLOUD +=$(wildcard cloud/protocol/mqtt/src/*.c)
-	 OBJS +=$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_CLOUD))
-	 C_PREDEF +=-D __$(CLOUD_SOLUTION)__
-#else
-     #other solutions to append
-endif
 #-------------------------------------------------------------------------------
 # Configure user reference library
 #-------------------------------------------------------------------------------

@@ -1,16 +1,3 @@
-##==========================================================================
- #                   Quectel OpenCPU
- #
- #              Copyright(c) 2012-2013 Quectel Ltd. All rights reserved.
- #
- #--------------------------------------------------------------------------
- # File Description
- # ----------------
- #      OpenCPU makefile for GCC.
- #
- #--------------------------------------------------------------------------
- #==========================================================================
-
 #-------------------------------------------------------------------------------
 # Configure GCC installation path, and GCC version.
 # To execute "arm-none-eabi-gcc -v" in command line can get the current gcc version 
@@ -18,7 +5,7 @@
 GCC_INSTALL_PATH=C:\Program Files (x86)\CodeSourcery\Sourcery_CodeBench_Lite_for_ARM_EABI
 GCC_VERSION=4.7.2
 
-C_PREDEF=-D __CUSTOMER_CODE__
+#C_PREDEF=-D __CUSTOMER_CODE__
 #-------------------------------------------------------------------------------
 # Configure the Cloud Solution
 #-------------------------------------------------------------------------------
@@ -46,8 +33,7 @@ INCS += -I ./           \
 #-------------------------------------------------------------------------------
 # Configure source code dirctories
 #-------------------------------------------------------------------------------
-SRC_DIRS=SDK\example    \
-		 src\     \
+SRC_DIRS=src\     \
 		 src\config     \
          src\fota\src   \
 		 SDK\ril\src    \
@@ -61,7 +47,6 @@ SRC_SYS=$(wildcard src/config/*.c)
 SRC_FOTA=$(wildcard src/fota/src/*.c)
 # RIL 
 SRC_SYS_RIL=$(wildcard SDK/ril/src/*.c)
-SRC_EXAMPLE=$(wildcard SDK/example/*.c)
 
 OBJS=\
 	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_SYS))        \

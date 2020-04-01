@@ -251,15 +251,18 @@ static bool hexstring_to_value(u8 *str, u8*val)
     return TRUE;
 }
 
-u32 SecureDataStringLen;
-bool IsDataReadSuccess = FALSE;
+
 typedef struct {
     u8* pHexBuf;
     u32 realLen;
+    u32 readSize;
+    bool IsDataReadSuccess;
 }ST_CustomParam;
 static s32 SecureData_Read_Callback(char* line, u32 len, void* userdata)
 {
-   char *head = Ql_RIL_FindString(line, len, "+QUSERDAT: 3,"); //continue wait
+    ST_CustomParam* pCus = (ST_CustomParam*)userdata;
+    
+    char *head = Ql_RIL_FindString(line, len, "+QUSERDAT: 3,"); //continue wait
     if(head)
     {
         u32 cplen;
@@ -269,16 +272,15 @@ static s32 SecureData_Read_Callback(char* line, u32 len, void* userdata)
         p2 = Ql_strstr(p1+1, "\"");
         if ((p1 != NULL)&&(p2!= NULL))
         {
-            ST_CustomParam* pCus = (ST_CustomParam*)userdata;
-            cplen = (SecureDataStringLen < (p2-p1-1))? (SecureDataStringLen):(p2-p1-1) ;
+            cplen = (pCus->readSize < (p2-p1-1))? (pCus->readSize):(p2-p1-1) ;
             pCus->realLen = cplen / 2;
             Ql_memcpy(pCus->pHexBuf, p1+1,cplen);
           //  Ql_Debug_Trace("Read backup hex:%s",userdata);
-            IsDataReadSuccess = TRUE;
+            pCus->IsDataReadSuccess = TRUE;
         }
         else
         {
-            IsDataReadSuccess = FALSE;
+            pCus->IsDataReadSuccess = FALSE;
         }
     }
     
@@ -318,19 +320,20 @@ s32 Ql_SecureData_Read(u8 index, u8* pBuffer, u32 len)
         return QL_RET_ERR_PARAM;
     }
 
-    SecureDataStringLen = 2*len;
     Ql_memset(&ptrCus, 0x0, sizeof(ST_CustomParam));
-    ptrCus.pHexBuf = Ql_MEM_Alloc(SecureDataStringLen+1); // 2*len   the buffer stroe the data read form 
+    ptrCus.readSize = 2*len;
+    ptrCus.IsDataReadSuccess = FALSE;
+    ptrCus.pHexBuf = Ql_MEM_Alloc(ptrCus.readSize +1); // 2*len   the buffer stroe the data read form 
     if(NULL == ptrCus.pHexBuf)
         return QL_RET_ERR_GET_MEM;
 
     Ql_memset(ATstr, 0x00, sizeof(ATstr));
     Ql_sprintf(ATstr,"AT+QUSERDAT=3,%d",index); // read index 
-    Ql_memset(ptrCus.pHexBuf, 0x00, SecureDataStringLen+1);
+    Ql_memset(ptrCus.pHexBuf, 0x00, ptrCus.readSize+1);
     ret = Ql_RIL_SendATCmd(ATstr, Ql_strlen(ATstr), SecureData_Read_Callback, &ptrCus, 0);
     if(ret <0)
         return ret;
-    if(!IsDataReadSuccess)
+    if(FALSE == ptrCus.IsDataReadSuccess)
     {
         Ql_MEM_Free(ptrCus.pHexBuf);
         ptrCus.pHexBuf = NULL;

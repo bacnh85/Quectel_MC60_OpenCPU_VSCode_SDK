@@ -502,8 +502,8 @@ s32   Ql_GPRS_GetDNSAddress(u8 contextId, u32* firstAddr, u32* secondAddr);
 *                   s32 ret;
 *                   u32 ip_dns1[5];
 *                   u32 ip_dns2[5];
-*                   u8 ipAddr_1st[4] = {208, 67, 222, 222};
-*                   u8 ipAddr_2st[4] = {8, 8, 8, 8};
+*                   u8 ipAddr_1st[] = "223.5.5.5";
+*                   u8 ipAddr_2st[] = "223.6.6.6";
 *               
 *                   Ql_memset(ip_dns1,0,5);
 *                   Ql_memset(ip_dns2,0,5);

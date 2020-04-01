@@ -89,7 +89,9 @@ extern void OnURCHandler_QWDTMF( const char* strURC, void* reserved );
 extern void OnURCHandler_GPSCMD(const char* strURC, void* reserved);
 // NTP URC callback
 extern void OnURCHandler_NTPCMD(const char* strURC, void* reserved);
-
+#ifdef __OCPU_RIL_QLBS_SUPPORT__
+extern void OnURCHandler_QLBS(const char* strURC,void* reserved);
+#endif
 /************************************************************************/
 /* Customer ATC URC callback                                          */
 /************************************************************************/
@@ -210,6 +212,9 @@ const static ST_URC_HDLENTRY m_AtURCHdlEntry[] = {
 
 	//NTP unsolicited response
 	{"\r\n+QNTP:",							  	  OnURCHandler_NTPCMD},
+#ifdef __OCPU_RIL_QLBS_SUPPORT__
+    {"\r\n+QLBS:",							  	  OnURCHandler_QLBS},
+#endif
 };
 
 static void OnURCHandler_SIM(const char* strURC, void* reserved)

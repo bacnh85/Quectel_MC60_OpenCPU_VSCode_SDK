@@ -164,7 +164,7 @@ s32 Ql_SPI_Read(u32 chnnlNo, u8 *pBuffer, u32 rdLen);
 * Function:     Ql_SPI_WriteRead 
 * 
 * Description:
-*               This function is used for SPI full-duplex communication 
+*               This function is used for SPI half-duplex communication 
 *               
 * Parameters:
 *               chnnlNo:
@@ -187,6 +187,34 @@ s32 Ql_SPI_Read(u32 chnnlNo, u8 *pBuffer, u32 rdLen);
 *               QL_RET_ERR_CHANNEL_NOT_FOUND, can't found the SPI channel, make sure it is initialized already.
 *****************************************************************/
 s32 Ql_SPI_WriteRead(u32 chnnlNo, u8 *pData, u32 wrtLen, u8 * pBuffer, u32 rdLen);
+
+/*****************************************************************
+* Function:     Ql_SPI_WriteRead_Ex
+* 
+* Description:
+*               This function is used for SPI full-duplex communication.
+*               
+* Parameters:
+*               chnnlNo:
+*                   [In] SPI channel No, the No is specified by Ql_SPI_Init function.
+*               pData:
+*                   [In] Setting value to slave.
+*               wrtLen:
+*                   [In] Number of bytes to write.
+*               pBuffer:
+*                   [Out] read buffer of reading from slave.
+*               rdLen:
+*                   [In] Number of bytes to read.
+*
+*               Notes:
+*                   if (wrtLen > rdLen) , the other read buffer data will be set 0xff;
+*                   if (rdLen > wrtLen) , the other write buffer data will be set 0xff;
+* Return:        
+*               if no error, return 0.
+*               QL_RET_ERR_PARAM, parameter error.
+*               QL_RET_ERR_CHANNEL_NOT_FOUND, can't found the SPI channel, make sure it is initialized already.
+*****************************************************************/
+s32 Ql_SPI_WriteRead_Ex(u32 chnnlNo, u8 *pData, u32 wrtLen, u8 * pBuffer, u32 rdLen);
 
 /*****************************************************************
 * Function:     Ql_SPI_Uninit 
