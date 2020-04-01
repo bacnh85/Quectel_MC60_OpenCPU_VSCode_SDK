@@ -5,12 +5,7 @@
 GCC_INSTALL_PATH=C:\Program Files (x86)\CodeSourcery\Sourcery_CodeBench_Lite_for_ARM_EABI
 GCC_VERSION=4.7.2
 
-#C_PREDEF=-D __CUSTOMER_CODE__
-#-------------------------------------------------------------------------------
-# Configure the Cloud Solution
-#-------------------------------------------------------------------------------
-CLOUD_SOLUTION =
-#GITWIZS_SOLUTION
+C_PREDEF=-D __CUSTOMER_CODE__
 
 #-------------------------------------------------------------------------------
 # Configure version and out target
@@ -35,7 +30,7 @@ INCS += -I ./           \
 #-------------------------------------------------------------------------------
 SRC_DIRS=src\     \
 		 src\config     \
-         src\fota\src   \
+     src\fota\src   \
 		 SDK\ril\src    \
 
 #-------------------------------------------------------------------------------
@@ -45,31 +40,14 @@ SRC_DIRS=src\     \
 SRC_CUS=$(wildcard src/*.c)
 SRC_SYS=$(wildcard src/config/*.c)
 SRC_FOTA=$(wildcard src/fota/src/*.c)
-# RIL 
 SRC_SYS_RIL=$(wildcard SDK/ril/src/*.c)
 
 OBJS=\
 	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_SYS))        \
 	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_SYS_RIL))    \
-	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_EXAMPLE))    \
 	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_CUS))        \
 	 $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_FOTA))      \
 
-ifeq ($(strip $(CLOUD_SOLUTION)),GITWIZS_SOLUTION)
-     INCS +=-I cloud/entity/gitwizs/inc
-	 INCS +=-I cloud/http/inc
-	 INCS +=-I cloud/protocol/mqtt/inc
-	 SRC_DIRS +=cloud\entity\gitwizs\src
-	 SRC_DIRS +=cloud\http\src
-	 SRC_DIRS +=cloud\protocol\mqtt\src
-	 SRC_CLOUD =$(wildcard cloud/entity/gitwizs/src/*.c)
-	 SRC_CLOUD +=$(wildcard cloud/http/src/*.c)
-	 SRC_CLOUD +=$(wildcard cloud/protocol/mqtt/src/*.c)
-	 OBJS +=$(patsubst %.c, $(OBJ_DIR)/%.o, $(SRC_CLOUD))
-	 C_PREDEF +=-D __$(CLOUD_SOLUTION)__
-#else
-     #other solutions to append
-endif
 #-------------------------------------------------------------------------------
 # Configure user reference library
 #-------------------------------------------------------------------------------

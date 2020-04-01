@@ -6,6 +6,8 @@ Following things are improved compared to official SDK:
 - SDK folder: remove all tools, example folder that not needed for normal development
 - Makefile: make clear Makefile script to include src files located at [src](/src) folder.
 
+![MC60 SDK](img/vscode.png)
+
 Advantage of OpenCPU approach is that: you can write application firmware just inside MC60 Module, instead of using external MCU, so total solution cost is reduced. 
 
 ![OpenCPU introduction](img/introduction.png)
