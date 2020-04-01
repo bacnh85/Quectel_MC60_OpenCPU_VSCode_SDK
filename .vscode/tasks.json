@@ -2,17 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build the MC60-E Project",
+            "label": "Build the MC60 Project",
             "type": "shell",
-            "command": "make\\make.exe ",
+            "command": "make ",
             "args": [
-                "",               
+                ""
             ],
-           
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
         }
     ]
 }

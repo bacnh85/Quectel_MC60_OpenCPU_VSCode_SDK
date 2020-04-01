@@ -7,8 +7,8 @@
                 "${workspaceFolder}/src/",
                 "${workspaceFolder}/SDK/include",
                 "${workspaceFolder}/SDK/ril/inc",
-                "${workspaceFolder}/SDK/custom/fota/inc",
-                "${workspaceFolder}/SDK/custom/config",
+                "${workspaceFolder}/src/fota/inc",
+                "${workspaceFolder}/src/config",
                 "C:\\Program Files (x86)\\CodeSourcery\\Sourcery_CodeBench_Lite_for_ARM_EABI\\arm-none-eabi\\include"
             ],
             "defines": [

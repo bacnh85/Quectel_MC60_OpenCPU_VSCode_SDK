@@ -4,7 +4,8 @@ As VSCode is the most popular SDK for developer and original SDK from Quectel is
 
 Following things are improved compared to official SDK:
 - SDK folder: remove all tools, example folder that not needed for normal development
-- Makefile: make clear Makefile script to include src files located at [src](/src) folder.
+- Makefile: make clear Makefile script to include src files located at `src` folder.
+- C language intelliSenseMode is configured
 
 ![MC60 SDK](img/vscode.png)
 
@@ -68,8 +69,7 @@ Folder structure:
 │   ├───include     <-- SDK include header files
 │   ├───libs        <-- Precompiled GCC library
 │   │   └───gcc
-│   ├───make
-│   │   └───gcc
+│   ├───make        <-- FW pkg generation tool
 │   └───ril         <-- RIL src, can adjust to fit your need
 │       ├───inc
 │       └───src
@@ -81,9 +81,15 @@ Folder structure:
 ```
 
 All development should be done inside `src` folder.
-In the terminal, you can just type ```make``` to build the images.
+In the `cmd` terminal, you can just type `make` to build the images.
+- To build fw: type `make` or select Terminal-->Run build task... (Ctr+Shift+B)
+- To clean fw: `make clean`
 
 *Note*: for this demo purpose, I just create submodule src that point to MC60 Example repository. You are free to link with your own src repository to build your application.
+
+## How to upgrade SDK
+
+Copy over folder `include`, `libs` and `ril` from Quectel SDK to this repo SDK folder.
 
 ## Technical support and copyright
 
